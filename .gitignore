@@ -176,3 +176,11 @@ logs/
 
 # Folder that has CTRE Phoenix Sim device config storage
 ctre_sim/
+
+# START: Setup gversion
+
+# Tell git to ignore the generated file: src/main/java/frc/robot/BuildConstants.java
+# We generally don't want to commit/track changes to files that are auto-generated during the build process
+
+src/main/java/frc/robot/BuildConstants.java
+# END: Setup gversion

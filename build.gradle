@@ -2,6 +2,7 @@ plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2024.3.2"
     id "com.diffplug.spotless" version "6.25.0"
+    id "com.peterabeles.gversion" version "1.10.3"
 }
 
 java {
@@ -121,3 +122,15 @@ if (!('spotlessCheck' in gradle.startParameter.taskNames)) {
     spotlessMiscCheck.enabled = false
 }
 // END: Setup spotless
+
+// START: Setup gversion
+project.compileJava.dependsOn(createVersionFile)
+gversion {
+    srcDir       = "src/main/java/"
+    classPackage = "frc.robot"
+    className    = "BuildConstants"
+    dateFormat   = "yyyy-MM-dd HH:mm:ss z"
+    timeZone     = "America/New_York" // Use preferred time zone
+    indent       = " "
+}
+// END: Setup gversion
