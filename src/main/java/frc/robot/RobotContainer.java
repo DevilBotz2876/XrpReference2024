@@ -6,8 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.XRPDrivetrain;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.subsystems.drive.DriveDifferentialIOXrp;
+import frc.robot.subsystems.drive.DriveSubsystemXrp;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -17,9 +19,8 @@ import frc.robot.subsystems.XRPDrivetrain;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final XRPDrivetrain m_xrpDrivetrain = new XRPDrivetrain();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_xrpDrivetrain);
+  private final DriveSubsystemXrp drive = new DriveSubsystemXrp(new DriveDifferentialIOXrp());
+  private final CommandXboxController mainController = new CommandXboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -33,7 +34,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    drive.setDefaultCommand(
+        new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getLeftX()));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -42,6 +46,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 }
