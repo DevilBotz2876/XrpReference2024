@@ -5,12 +5,16 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.auto.AutoSpin720;
+import frc.robot.commands.auto.AutoStillCommand;
 import frc.robot.subsystems.arm.ArmIOXrp;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.DriveDifferentialIOXrp;
@@ -35,10 +39,17 @@ public class RobotContainer {
 
   private final CommandXboxController mainController = new CommandXboxController(0);
 
+  public static SendableChooser<Command> autoChooser = new SendableChooser<>();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    autoChooser.setDefaultOption("Still", new AutoStillCommand());
+    autoChooser.addOption("Auto Spin 720 Degrees", new AutoSpin720(drive));
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -67,6 +78,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return autoChooser.getSelected();
   }
 }
