@@ -24,7 +24,7 @@ public class TurnDegrees extends Command {
   public TurnDegrees(Drive drive, double degrees, double speed) {
     this.degrees = degrees;
     this.speed = Math.max(-1.0, Math.min(speed, 1.0));
-    this.degreesError = 2;
+    this.degreesError = 5;
     this.drive = drive;
     addRequirements((Subsystem) drive);
   }
