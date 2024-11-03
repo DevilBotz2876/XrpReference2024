@@ -8,9 +8,9 @@ public class AutoSpin720 extends SequentialCommandGroup {
 
   public AutoSpin720(Drive drive) {
     addCommands(
-        new TurnDegrees(drive, 180, 0.25).withTimeout(1.5),
-        new TurnDegrees(drive, 180, 0.25).withTimeout(1.5),
-        new TurnDegrees(drive, 180, 0.25).withTimeout(1.5),
-        new TurnDegrees(drive, 180, 0.25).withTimeout(1.5));
+        new TurnDegrees(drive, 180, 0.25),
+        new TurnDegrees(drive, 180, 0.25),
+        new TurnDegrees(drive, 180, 0.25),
+        new TurnDegrees(drive, 180, 0.25));
   }
 }
