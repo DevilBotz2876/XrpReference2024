@@ -9,10 +9,10 @@ public class AutoForwardBack extends SequentialCommandGroup {
 
   public AutoForwardBack(Drive drive) {
     addCommands(
-        new ArcadeDrive(drive, () -> 0.5, () -> 0.0).withTimeout(1),
+        new ArcadeDrive(drive, () -> 0.5, () -> 0.0).withTimeout(2),
         new ArcadeDrive(drive, () -> 0.0, () -> 0.0).withTimeout(0.1),
         new TurnDegrees(drive, 180, 0.5),
-        new ArcadeDrive(drive, () -> 0.5, () -> 0.0).withTimeout(1),
+        new ArcadeDrive(drive, () -> 0.5, () -> 0.0).withTimeout(2),
         new ArcadeDrive(drive, () -> 0.0, () -> 0.0).withTimeout(0.1),
         new TurnDegrees(drive, 180, 0.5));
   }
