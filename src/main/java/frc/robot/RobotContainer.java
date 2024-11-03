@@ -13,6 +13,7 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.auto.AutoForwardBack;
 import frc.robot.commands.auto.AutoSpin720;
 import frc.robot.commands.auto.AutoStillCommand;
 import frc.robot.subsystems.arm.ArmIOXrp;
@@ -48,6 +49,7 @@ public class RobotContainer {
 
     autoChooser.setDefaultOption("Still", new AutoStillCommand());
     autoChooser.addOption("Auto Spin 720 Degrees", new AutoSpin720(drive));
+    autoChooser.addOption("Auto Forward Backward", new AutoForwardBack(drive));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
