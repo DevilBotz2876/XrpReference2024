@@ -48,8 +48,9 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    // drive.setDefaultCommand(
-    //        new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getRightX()));
+    // Configure the robot to be driven by the left stick for steering and for throttle
+    drive.setDefaultCommand(
+            new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getRightX()));
   }
 
   /**
@@ -70,12 +71,14 @@ public class RobotContainer {
     bPressCount++;
     if (bPressCount % 2 == 1)
     {
+      // Left stick controlls steering
       new ArcadeDrive(
         drive, 
         () -> -mainController.getLeftY(),
         () -> -mainController.getLeftX()
       ).schedule();
     } else {
+      // Right stick controlls steering
       new ArcadeDrive(
         drive, 
         () -> -mainController.getLeftY(),
