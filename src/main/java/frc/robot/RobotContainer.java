@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmCommand;
@@ -19,6 +21,9 @@ import frc.robot.subsystems.intake.IntakeIOXrp;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOXrp;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -35,10 +40,16 @@ public class RobotContainer {
 
   private final CommandXboxController mainController = new CommandXboxController(0);
 
+  // Stores the number of times the "B" button has been pressed
+  private int bPressCount = 0;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    // drive.setDefaultCommand(
+    //        new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getRightX()));
   }
 
   /**
@@ -48,17 +59,38 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    drive.setDefaultCommand(
-        new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getLeftX()));
 
-    arm.setDefaultCommand(new ArmCommand(arm, () -> -mainController.getRightY()));
-    intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
-    shooter.setDefaultCommand(
-        new ShooterCommand(
-            shooter,
-            () -> mainController.getLeftTriggerAxis(),
-            () -> mainController.getRightTriggerAxis()));
+    // toggles the drive mode between left stick controlling steering and right stick controlling steering 
+    new Trigger(mainController.b().onTrue(new InstantCommand(this::handleBButtonPress)));
   }
+  
+  // toggles the drive mode between left stick controlling steering and right stick controlling steering
+  private void handleBButtonPress(){
+      
+    bPressCount++;
+    if (bPressCount % 2 == 1)
+    {
+      new ArcadeDrive(
+        drive, 
+        () -> -mainController.getLeftY(),
+        () -> -mainController.getLeftX()
+      ).schedule();
+    } else {
+      new ArcadeDrive(
+        drive, 
+        () -> -mainController.getLeftY(),
+        () -> -mainController.getRightX()
+      ).schedule();
+    }
+  };
+    
+  //arm.setDefaultCommand(new ArmCommand(arm, () -> -mainController.()));
+  //intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
+  //shooter.setDefaultCommand(
+  //    new ShooterCommand(
+  //       shooter,
+  //      () -> mainController.getLeftTriggerAxis(),
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
