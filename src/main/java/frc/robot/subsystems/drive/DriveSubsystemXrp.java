@@ -63,6 +63,10 @@ public class DriveSubsystemXrp extends SubsystemBase implements Drive {
     io.tankDrive(leftSpeed, rightSpeed);
   }
 
+  public void tankDrive(double leftSpeed, double rightSpeed) {
+    io.tankDrive(leftSpeed, rightSpeed);
+  }
+
   public Pose2d getPose() {
     return pose;
   }

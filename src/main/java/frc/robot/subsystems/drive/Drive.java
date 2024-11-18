@@ -8,6 +8,8 @@ public interface Drive {
 
   public void setChassisSpeeds(ChassisSpeeds speeds);
 
+  public void tankDrive(double leftVelocity, double rightVelocity);
+
   public Pose2d getPose();
 
   public void setPose(Pose2d pose);
