@@ -28,8 +28,8 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SetArmAngleCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TankDrive;
-import frc.robot.commands.TurnDegreesGyro;
 import frc.robot.commands.TurnDegrees;
+import frc.robot.commands.TurnDegreesGyro;
 import frc.robot.subsystems.arm.ArmIOXrp;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.DriveDifferentialIOXrp;
@@ -157,7 +157,8 @@ public class RobotContainer {
     driveLayout
         .add(
             "turn angle command (gyro) (not working)",
-            new TurnDegreesGyro(drive, () -> turnAngle.getDouble(0.0), () -> turnSpeed.getDouble(0.0)))
+            new TurnDegreesGyro(
+                drive, () -> turnAngle.getDouble(0.0), () -> turnSpeed.getDouble(0.0)))
         .withPosition(0, 2);
     driveLayout
         .add(
@@ -165,10 +166,7 @@ public class RobotContainer {
             new TurnDegrees(() -> turnSpeed.getDouble(0.0), () -> turnAngle.getDouble(0.0), drive))
         .withPosition(0, 2);
 
-    driveLayout
-        .add(
-            "drive",
-            new AutoDrive(drive));
+    driveLayout.add("drive", new AutoDrive(drive));
   }
 
   /**
