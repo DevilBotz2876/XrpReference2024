@@ -12,6 +12,9 @@ public class DriveDifferentialIOXrp implements DriveDifferentialIO {
   private static final double countsPerMotorShaftRev = 12.0;
   private static final double countsPerRevolution = countsPerMotorShaftRev * gearRatio; // 585.0
 
+  private static final double wheelDiameterInch = 2.3622;
+  private static final double countsToInches = (Math.PI * wheelDiameterInch) / countsPerRevolution;
+
   // The XRP has the left and right motors set to
   // channels 0 and 1 respectively
   private final XRPMotor leftMotor = new XRPMotor(0);
@@ -45,6 +48,9 @@ public class DriveDifferentialIOXrp implements DriveDifferentialIO {
     inputs.rightVelocityRadPerSec = rightEncoder.getRate();
     inputs.leftPositionRad = leftEncoder.getDistance();
     inputs.rightPositionRad = rightEncoder.getDistance();
+
+    inputs.leftPositionInch = leftEncoder.get() * countsToInches;
+    inputs.rightPositionInch = rightEncoder.get() * countsToInches;
 
     inputs.xRotation = Rotation2d.fromDegrees(gyro.getAngleX());
     inputs.yRotation = Rotation2d.fromDegrees(gyro.getAngleY());

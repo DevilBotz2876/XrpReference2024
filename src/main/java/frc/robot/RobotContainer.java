@@ -27,6 +27,8 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SetArmAngleCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TankDrive;
+import frc.robot.commands.TurnAngle;
+import frc.robot.commands.TurnDegrees;
 import frc.robot.subsystems.arm.ArmIOXrp;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.DriveDifferentialIOXrp;
@@ -135,6 +137,32 @@ public class RobotContainer {
             .getEntry();
     armLayout.add("set angle", new SetArmAngleCommand(arm, () -> armAngle.getDouble(0.0)));
 
+    ShuffleboardLayout driveLayout =
+        commandsTab.getLayout("Drive", BuiltInLayouts.kGrid).withSize(2, 3);
+    GenericEntry turnAngle =
+        driveLayout
+            .add("turn angle", 0)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", -359, "max", 359))
+            .withPosition(0, 0)
+            .getEntry();
+    GenericEntry turnSpeed =
+        driveLayout
+            .add("turn speed", 0)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", -1, "max", 1))
+            .withPosition(0, 1)
+            .getEntry();
+    driveLayout
+        .add(
+            "turn angle command (gyro) (not working)",
+            new TurnAngle(drive, () -> turnAngle.getDouble(0.0), () -> turnSpeed.getDouble(0.0)))
+        .withPosition(0, 2);
+    driveLayout
+        .add(
+            "turn angle command",
+            new TurnDegrees(() -> turnSpeed.getDouble(0.0), () -> turnAngle.getDouble(0.0), drive))
+        .withPosition(0, 2);
   }
 
   /**

@@ -10,6 +10,8 @@ public interface DriveDifferentialIO {
     public double rightVelocityRadPerSec;
     public double leftPositionRad;
     public double rightPositionRad;
+    public double leftPositionInch;
+    public double rightPositionInch;
 
     public Rotation2d xRotation;
     public Rotation2d yRotation;

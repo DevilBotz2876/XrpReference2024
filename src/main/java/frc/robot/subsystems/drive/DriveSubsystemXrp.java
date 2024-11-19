@@ -97,4 +97,12 @@ public class DriveSubsystemXrp extends SubsystemBase implements Drive {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  public double getLeftDistanceInch() {
+    return inputs.leftPositionInch;
+  }
+
+  public double getRightDistanceInch() {
+    return inputs.rightPositionInch;
+  }
 }

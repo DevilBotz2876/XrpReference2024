@@ -13,4 +13,8 @@ public interface Drive {
   public Pose2d getPose();
 
   public void setPose(Pose2d pose);
+
+  public double getLeftDistanceInch();
+
+  public double getRightDistanceInch();
 }
