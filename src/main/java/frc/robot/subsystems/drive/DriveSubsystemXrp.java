@@ -88,6 +88,24 @@ public class DriveSubsystemXrp extends SubsystemBase implements Drive {
     io.tankDrive(leftSpeed, rightSpeed);
   }
 
+  // Other class members and methods
+
+  /**
+  * Sets the chassis speeds for the left and right wheels.
+  *
+  * @param leftspeed The speed for the left wheel.
+  * @param rightspeed The speed for the right wheel.
+  */
+  @Override
+  public void setChassisSpeeds(double leftSpeed, double rightSpeed) {
+
+    leftSpeed = leftSpeed / DriveConstants.maxLinearVelocityMetersPerSec;
+    rightSpeed = rightSpeed / DriveConstants.maxLinearVelocityMetersPerSec;
+    
+    // Drive the robot using the calculated wheel speeds
+    io.tankDrive(leftSpeed, rightSpeed);
+  }
+
   public Pose2d getPose() {
     return pose;
   }

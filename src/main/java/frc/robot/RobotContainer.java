@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.TankDrive;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
@@ -50,7 +51,7 @@ public class RobotContainer {
 
     // Configure the robot to be driven by the left stick for steering and for throttle
     drive.setDefaultCommand(
-            new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getRightX()));
+            new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getLeftX()));
   }
 
   /**
@@ -68,22 +69,39 @@ public class RobotContainer {
   // toggles the drive mode between left stick controlling steering and right stick controlling steering
   private void handleBButtonPress(){
       
+    // Increment the button B press count
     bPressCount++;
-    if (bPressCount % 2 == 1)
-    {
-      // Left stick controlls steering
-      new ArcadeDrive(
-        drive, 
-        () -> -mainController.getLeftY(),
-        () -> -mainController.getLeftX()
-      ).schedule();
-    } else {
-      // Right stick controlls steering
-      new ArcadeDrive(
-        drive, 
-        () -> -mainController.getLeftY(),
-        () -> -mainController.getRightX()
-      ).schedule();
+
+    // Use modulo to cycle through control schemes
+    int controlScheme = bPressCount % 3;
+
+    switch (controlScheme) {
+        case 0:
+            // Left stick controls steering
+            new ArcadeDrive(drive, 
+            () -> -mainController.getLeftY(), 
+            () -> -mainController.getLeftX()
+            ).schedule();
+            break;
+        case 1:
+            // Right stick controls steering
+            new ArcadeDrive(
+                drive, 
+                () -> -mainController.getLeftY(),
+                () -> -mainController.getRightX()
+            ).schedule();
+            break;
+        case 2:
+            // Both sticks control steering (example of a third scheme)
+            new TankDrive(
+                drive, 
+                () -> -mainController.getLeftY(),
+                () -> -mainController.getRightY() 
+            ).schedule();
+            break;
+        default:
+            // Default case (should not be reached)
+            break;
     }
   };
     

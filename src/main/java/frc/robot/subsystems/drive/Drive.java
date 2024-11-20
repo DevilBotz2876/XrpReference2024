@@ -7,6 +7,7 @@ public interface Drive {
   public ChassisSpeeds getChassisSpeeds();
 
   public void setChassisSpeeds(ChassisSpeeds speeds);
+  public void setChassisSpeeds(double leftSpeed, double rightSpeed);
 
   public Pose2d getPose();
 
