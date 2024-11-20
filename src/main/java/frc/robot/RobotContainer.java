@@ -48,10 +48,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
-    // Configure the robot to be driven by the left stick for steering and for throttle
-    drive.setDefaultCommand(
-            new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getLeftX()));
+  
   }
 
   /**
@@ -61,6 +58,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // Configure the robot to be driven by the left stick for steering and for throttle
+    drive.setDefaultCommand(
+            new ArcadeDrive(drive, 
+              () -> -mainController.getLeftY(), 
+              () -> -mainController.getLeftX()));
 
     // toggles the drive mode between left stick controlling steering and right stick controlling steering 
     new Trigger(mainController.b().onTrue(new InstantCommand(this::handleBButtonPress)));
