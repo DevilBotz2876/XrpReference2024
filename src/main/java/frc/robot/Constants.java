@@ -14,7 +14,7 @@ package frc.robot;
  */
 public final class Constants {
   public class DriveConstants {
-    public static double maxLinearVelocityMetersPerSec = 1.0;
+    public static double maxLinearVelocityMetersPerSec = 3.0;
     public static double maxAngularVelocityRadPerSec = 4 * 2 * Math.PI;
   }
 }
