@@ -28,12 +28,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
- * subsystems, commands, and button mappings) should be declared here.
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in
+ * the {@link Robot} periodic methods (other than the scheduler calls). Instead,
+ * the structure of
+ * the robot (including subsystems, commands, and button mappings) should be
+ * declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -72,6 +72,14 @@ public class RobotContainer {
         new ArcadeDrive(drive,
             () -> -mainController.getLeftY(),
             () -> -mainController.getLeftX()));
+
+    arm.setDefaultCommand(new ArmCommand(arm, () -> -mainController.getRightY()));
+
+    intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
+
+    shooter.setDefaultCommand(new ShooterCommand(shooter,
+        () -> mainController.getLeftTriggerAxis(),
+        () -> mainController.getRightTriggerAxis()));
 
     // toggles the drive mode between left stick controlling steering and right
     // stick controlling steering
@@ -124,14 +132,6 @@ public class RobotContainer {
         break;
     }
   };
-
-  // arm.setDefaultCommand(new ArmCommand(arm, () -> -mainController.()));
-  // intake.setDefaultCommand(new IntakeCommand(intake, () ->
-  // -mainController.getRightX()));
-  // shooter.setDefaultCommand(
-  // new ShooterCommand(
-  // shooter,
-  // () -> mainController.getLeftTriggerAxis(),
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
