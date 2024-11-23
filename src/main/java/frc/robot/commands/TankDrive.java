@@ -17,11 +17,13 @@ public class TankDrive extends Command {
   private final Supplier<Double> leftWheelSpeedSupplier;
 
   /**
-   * Creates a new TankDrive. This command will drive your robot according to the speed supplier
+   * Creates a new TankDrive. This command will drive your robot according to the
+   * speed supplier
    * lambdas. This command does not terminate.
    *
-   * @param drive The drivetrain subsystem on which this command will run
-   * @param leftWheelSpeedSupplier Lambda supplier of forward/backward speed
+   * @param drive                   The drivetrain subsystem on which this command
+   *                                will run
+   * @param leftWheelSpeedSupplier  Lambda supplier of forward/backward speed
    * @param rightWheelSpeedSupplier Lambda supplier of rotational speed
    */
   public TankDrive(
@@ -34,19 +36,21 @@ public class TankDrive extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     drive.setChassisSpeeds(
-         rightWheelSpeedSupplier.get() * DriveConstants.maxLinearVelocityMetersPerSec,
-         leftWheelSpeedSupplier.get() * DriveConstants.maxAngularVelocityRadPerSec);
+        rightWheelSpeedSupplier.get() * DriveConstants.maxLinearVelocityMetersPerSec,
+        leftWheelSpeedSupplier.get() * DriveConstants.maxAngularVelocityRadPerSec);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
