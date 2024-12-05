@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -22,9 +23,11 @@ import frc.robot.subsystems.intake.IntakeIOXrp;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOXrp;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.commands.AutonomousDistance;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -56,6 +59,10 @@ public class RobotContainer {
 
   }
 
+  // Create SmartDashboard chooser for autonomous routines
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+
   /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by
@@ -84,6 +91,12 @@ public class RobotContainer {
     // toggles the drive mode between left stick controlling steering and right
     // stick controlling steering
     new Trigger(mainController.b().onTrue(new InstantCommand(this::handleBButtonPress)));
+
+    mainController.a().toggleOnTrue(new AutonomousDistance(drive));
+    // Setup SmartDashboard options for autonomous routines
+    m_chooser.setDefaultOption("Auto Routine Distance", new AutonomousDistance(drive));
+
+
   }
 
   // toggles the drive mode between left stick controlling steering and right
