@@ -4,8 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.struct.ChassisSpeedsStruct;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmCommand;
@@ -51,7 +56,7 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getLeftX()));
 
-    arm.setDefaultCommand(new ArmCommand(arm, () -> -mainController.getRightY()));
+    arm.setDefaultCommand(new ArmCommand(arm, () -> mainController.getRightY()));
     intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
     shooter.setDefaultCommand(
         new ShooterCommand(
@@ -67,6 +72,14 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    SequentialCommandGroup myAuto = new SequentialCommandGroup(
+      new InstantCommand(
+        () -> drive.setChassisSpeeds(new ChassisSpeeds(1.0, 0.0, 0.0)), drive),
+      new WaitCommand(20),
+      new InstantCommand(
+        () -> drive.setChassisSpeeds(new ChassisSpeeds(0.0, 0.0, 0.0)), drive)
+      );
+    return myAuto;
+    //return null;
   }
 }

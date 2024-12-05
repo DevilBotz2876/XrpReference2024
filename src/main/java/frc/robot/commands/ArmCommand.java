@@ -17,6 +17,6 @@ public class ArmCommand extends Command {
 
   @Override
   public void execute() {
-    arm.setAngle(((angleSupplier.get() + 1) / 2) * 180);
+    arm.setAngle(((angleSupplier.get() * 90 + 40)));
   }
 }
