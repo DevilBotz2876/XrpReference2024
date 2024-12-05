@@ -120,6 +120,10 @@ public class DriveSubsystemXrp extends SubsystemBase implements Drive {
     io.tankDrive(leftSpeed, rightSpeed);
   }
 
+  public void resetEncoders(){
+    io.resetEncoders();
+  }
+  
   /**
    * Gets the current pose of the robot.
    * The pose represents the robot's position and orientation on the field.
@@ -177,6 +181,37 @@ public class DriveSubsystemXrp extends SubsystemBase implements Drive {
     // Update the field with the robot's current pose
     field.setRobotPose(pose);
 
+  }
+
+  /**
+   * The current position of the right wheels in meters.
+   *
+   * @return the current position of the right wheels (in meters)
+   */
+  public double getRightPositionMeters() {
+    double position = Units.radiansToRotations(inputs.rightPositionRad) * wheelDiameterMeters;
+    return Units.radiansToRotations(inputs.rightPositionRad) * wheelDiameterMeters;
+  }
+
+  /**
+   * The current position of the right wheels in meters.
+   *
+   * @return the current position of the right wheels (in meters)
+   */
+  public double getLeftPositionMeters() {
+    double position = Units.radiansToRotations(inputs.leftPositionRad) * wheelDiameterMeters;
+    return Units.radiansToRotations(inputs.leftPositionRad) * wheelDiameterMeters;
+  }
+
+  /**
+   * The average wheel distance in meters
+   *
+   * @return the average wheel distance (in meters)
+   */
+  public double getAverageDistanceMeters() {
+    double distanceTraveled = (getLeftPositionMeters() + getRightPositionMeters()) / 2.0;
+    System.out.println("Distance Traveled: " + distanceTraveled);
+    return (getLeftPositionMeters() + getRightPositionMeters()) / 2.0;
   }
 
   @Override
