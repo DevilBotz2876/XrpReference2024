@@ -103,12 +103,20 @@ public class RobotContainer {
     Trigger armDownPOVTrigger = armDownPOVEvent.castTo(Trigger::new);
     armDownPOVTrigger.whileTrue(new SetArmAngleCommand(arm, () -> arm.getAngle() - 1));
 
-    intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
+    intake.setDefaultCommand(new IntakeCommand(intake, () -> {
+        if(mainController.leftBumper().getAsBoolean()) {
+            return 1.0;
+        }
+        if(mainController.rightBumper().getAsBoolean()) {
+            return -1.0;
+        }
+        return 0.0;}));
+
     shooter.setDefaultCommand(
         new ShooterCommand(
             shooter,
-            () -> mainController.getLeftTriggerAxis(),
-            () -> mainController.getRightTriggerAxis()));
+            () -> mainController.getRightTriggerAxis() * 0.85,
+            () -> mainController.getLeftTriggerAxis() * 0.85));
 
     mainController
         .pov(270)
