@@ -35,6 +35,7 @@ public class DriveDistance extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_drive.setChassisSpeeds(0, 0);
     m_drive.resetEncoders();
     m_pidController.reset();
   }
