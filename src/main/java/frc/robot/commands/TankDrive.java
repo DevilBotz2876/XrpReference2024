@@ -5,6 +5,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.DriveConstants;
@@ -15,6 +17,11 @@ public class TankDrive extends Command {
   private final Drive drive;
   private final Supplier<Double> rightWheelSpeedSupplier;
   private final Supplier<Double> leftWheelSpeedSupplier;
+
+
+  // Create a DifferentialDriveKinematics object with the track width
+  private DifferentialDriveKinematics kinematics = 
+    new DifferentialDriveKinematics(DriveConstants.trackWidthMeters);
 
   /**
    * Creates a new TankDrive. This command will drive your robot according to the
@@ -42,9 +49,19 @@ public class TankDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.setChassisSpeeds(
-        rightWheelSpeedSupplier.get() * DriveConstants.maxLinearVelocityMetersPerSec,
-        leftWheelSpeedSupplier.get() * DriveConstants.maxAngularVelocityRadPerSec);
+    
+    double rightWheelSpeed = rightWheelSpeedSupplier.get() * DriveConstants.maxLinearVelocityMetersPerSec;
+    double leftWheelSpeed = leftWheelSpeedSupplier.get() * DriveConstants.maxLinearVelocityMetersPerSec;
+
+    // Create a DifferentialDriveWheelSpeeds object with the wheel speeds
+    DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(leftWheelSpeed, rightWheelSpeed);
+    
+    // Convert the wheel speeds to chassis speeds
+    ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(wheelSpeeds);
+
+    // Pass the wheel speeds to the drive subsystem
+    drive.setChassisSpeeds(chassisSpeeds);
+
   }
 
   // Called once the command ends or is interrupted.

@@ -5,16 +5,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.drive.DriveSubsystemXrp;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 
 public class DriveDistance extends Command {
   private final DriveSubsystemXrp m_drive;
   private final double m_distance;
   private final double m_speed;
   private final PIDController m_pidController;
-  
+  private final DifferentialDriveKinematics m_kinematics;
 
   /**
    * Creates a new DriveDistance. This command will drive your your robot for a desired distance at
@@ -29,13 +35,19 @@ public class DriveDistance extends Command {
     m_speed = speed;
     m_drive = drive;
     m_pidController = new PIDController(1.0, 0.0, 0.0); // Adjust PID constants as needed
+    
+    // Create a DifferentialDriveKinematics object with the track width
+    m_kinematics = 
+      new DifferentialDriveKinematics(DriveConstants.trackWidthMeters);
+
     addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.setChassisSpeeds(0, 0);
+    
+    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
     m_drive.resetEncoders();
     m_pidController.reset();
   }
@@ -51,13 +63,20 @@ public class DriveDistance extends Command {
     double leftSpeed = m_speed - correction;
     double rightSpeed = m_speed + correction;
 
-    m_drive.setChassisSpeeds(leftSpeed, rightSpeed);
+    // Create a DifferentialDriveWheelSpeeds object with the wheel speeds
+    DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
+
+    // Convert the wheel speeds to chassis speeds
+    ChassisSpeeds chassisSpeeds = m_kinematics.toChassisSpeeds(wheelSpeeds);
+
+
+    m_drive.setChassisSpeeds(chassisSpeeds);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.setChassisSpeeds(0, 0);
+    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
   }
 
   // Returns true when the command should end.

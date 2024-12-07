@@ -19,14 +19,6 @@ public interface Drive {
   public void setChassisSpeeds(ChassisSpeeds speeds);
 
   /**
-   * Sets the chassis speeds for the left and right wheels.
-   *
-   * @param leftSpeed  The speed for the left wheel.
-   * @param rightSpeed The speed for the right wheel.
-   */
-  public void setChassisSpeeds(double leftSpeed, double rightSpeed);
-
-  /**
    * Gets the current pose of the robot.
    *
    * @return The current pose of the robot.

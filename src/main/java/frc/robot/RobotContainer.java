@@ -65,14 +65,13 @@ public class RobotContainer {
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-   * subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-   * it to a {@link
+   * created by instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one
+   * of its subclasses ({@link edu.wpi.first.wpilibj.Joystick} or {@link 
+   * XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
     // Configure the robot to be driven by the left stick for steering and for
     // throttle
     drive.setDefaultCommand(
@@ -80,6 +79,18 @@ public class RobotContainer {
             () -> -mainController.getLeftY(),
             () -> -mainController.getLeftX()));
 
+    // // Arcade drive but left stick for throttle and right stick controls steering
+    // drive.setDefaultCommand(
+    //     new ArcadeDrive(drive,
+    //         () -> -mainController.getLeftY(),
+    //         () -> -mainController.getRightX()));
+
+    //Both sticks control steering using TankDrive
+    // drive.setDefaultCommand(
+    //        new TankDrive(drive,
+    //           () -> -mainController.getLeftY(),
+    //           () -> -mainController.getRightY()));
+    
     arm.setDefaultCommand(new ArmCommand(arm, () -> -mainController.getRightY()));
 
     intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
@@ -88,63 +99,10 @@ public class RobotContainer {
         () -> mainController.getLeftTriggerAxis(),
         () -> mainController.getRightTriggerAxis()));
 
-    // toggles the drive mode between left stick controlling steering and right
-    // stick controlling steering
-    new Trigger(mainController.b().onTrue(new InstantCommand(this::handleBButtonPress)));
-
     mainController.a().toggleOnTrue(new AutonomousDistance(drive));
-    // Setup SmartDashboard options for autonomous routines
-    m_chooser.setDefaultOption("Auto Routine Distance", new AutonomousDistance(drive));
-
-
+    
   }
 
-  // toggles the drive mode between left stick controlling steering and right
-  // stick controlling steering
-  private void handleBButtonPress() {
-
-    // Increment the button B press count
-    bPressCount++;
-
-    // Use modulo to cycle through control schemes
-    int controlScheme = bPressCount % 3;
-
-    /**
-     * Switches between different control schemes for the robot's steering based on
-     * the value of controlScheme.
-     * Each case represents a different control scheme:
-     * - Case 0: Left stick controls steering using ArcadeDrive.
-     * - Case 1: Right stick controls steering using ArcadeDrive.
-     * - Case 2: Both sticks control steering using TankDrive.
-     *
-     * @param controlScheme The current control scheme to use.
-     */
-    switch (controlScheme) {
-      case 0:
-        // Left stick controls steering
-        new ArcadeDrive(drive,
-            () -> -mainController.getLeftY(),
-            () -> -mainController.getLeftX()).schedule();
-        break;
-      case 1:
-        // Right stick controls steering
-        new ArcadeDrive(
-            drive,
-            () -> -mainController.getLeftY(),
-            () -> -mainController.getRightX()).schedule();
-        break;
-      case 2:
-        // Both sticks control steering using TankDrive
-        new TankDrive(
-            drive,
-            () -> -mainController.getLeftY(),
-            () -> -mainController.getRightY()).schedule();
-        break;
-      default:
-        // Default case (should not be reached)
-        break;
-    }
-  };
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

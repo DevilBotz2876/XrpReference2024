@@ -13,8 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
-import java.nio.channels.WritableByteChannel;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -59,9 +57,6 @@ public class DriveSubsystemXrp extends SubsystemBase implements Drive {
   public DriveSubsystemXrp(DriveDifferentialIO io) {
     this.io = io;
 
-    // START: Setup Odometry for dashboard display.
-    SmartDashboard.putData("Field", field);
-    // END: Setup Odometry
   }
 
   /**
@@ -99,26 +94,11 @@ public class DriveSubsystemXrp extends SubsystemBase implements Drive {
     // the robot can move in a straight line)
     leftSpeed = wheelSpeeds.leftMetersPerSecond / DriveConstants.maxLinearVelocityMetersPerSec;
     rightSpeed = wheelSpeeds.rightMetersPerSecond / DriveConstants.maxLinearVelocityMetersPerSec;
-
+    System.out.print("setChassisSpeeds leftSpeed: " + leftSpeed + " rightSpeed: " + rightSpeed + "\n");
     // Drive the robot using the calculated wheel speeds
     io.tankDrive(leftSpeed, rightSpeed);
   }
 
-  /**
-   * Sets the chassis speeds for the left and right wheels.
-   *
-   * @param leftspeed  The speed for the left wheel.
-   * @param rightspeed The speed for the right wheel.
-   */
-  @Override
-  public void setChassisSpeeds(double leftSpeed, double rightSpeed) {
-
-    leftSpeed = leftSpeed / DriveConstants.maxLinearVelocityMetersPerSec;
-    rightSpeed = rightSpeed / DriveConstants.maxLinearVelocityMetersPerSec;
-
-    // Drive the robot using the calculated wheel speeds
-    io.tankDrive(leftSpeed, rightSpeed);
-  }
 
   public void resetEncoders(){
     io.resetEncoders();

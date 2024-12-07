@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.DriveSubsystemXrp;
 
@@ -31,20 +32,20 @@ public class TurnDegrees extends Command {
   @Override
   public void initialize() {
     // Set motors to stop, read encoder values for starting point
-    m_drive.setChassisSpeeds(0, 0);
+    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.setChassisSpeeds(0, m_speed);
+    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.setChassisSpeeds(0, 0);
+    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
   }
 
   // Returns true when the command should end.
