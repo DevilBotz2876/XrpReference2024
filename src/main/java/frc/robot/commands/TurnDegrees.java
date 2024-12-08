@@ -32,27 +32,26 @@ public class TurnDegrees extends Command {
   @Override
   public void initialize() {
     // Set motors to stop, read encoder values for starting point
-    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
-
+    m_drive.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
+    m_drive.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
+    m_drive.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     /* Need to convert distance travelled to degrees. The Standard
-       
+
        XRP Chassis has a track width of .155 m
     */
     double meterPerDegree = Math.PI * .155 / 360;

@@ -6,13 +6,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.drive.DriveSubsystemXrp;;
+import frc.robot.subsystems.drive.DriveSubsystemXrp;
 
 public class DriveTime extends Command {
-  private final double m_duration;
-  private final double m_speed;
-  private final DriveSubsystemXrp m_drive;
-  private long m_startTime;
+  private final double duration;
+  private final double speed;
+  private final DriveSubsystemXrp drive;
+  private long startTime;
 
   /**
    * Creates a new DriveTime. This command will drive your robot for a desired speed and time.
@@ -21,35 +21,35 @@ public class DriveTime extends Command {
    * @param time How much time to drive in seconds
    * @param drive The drivetrain subsystem on which this command will run
    */
-  public DriveTime(double speed, double time, DriveSubsystemXrp drive) {
-    m_speed = speed;
-    m_duration = time * 1000;
-    m_drive = drive;
+  public DriveTime(double robotSpeed, double time, DriveSubsystemXrp driveSubsystem) {
+    speed = robotSpeed;
+    duration = time * 1000;
+    drive = driveSubsystem;
     addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_startTime = System.currentTimeMillis();
-    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
+    startTime = System.currentTimeMillis();
+    drive.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
+    drive.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
+    drive.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (System.currentTimeMillis() - m_startTime) >= m_duration;
+    return (System.currentTimeMillis() - startTime) >= duration;
   }
 }

@@ -9,37 +9,29 @@ import edu.wpi.first.wpilibj.xrp.XRPMotor;
 public class DriveDifferentialIOXrp implements DriveDifferentialIO {
 
   /**
-   * The gear ratio of the drive system.
-   * This is calculated as the product of the ratios of each stage in the gear
-   * train.
-   * The gear ratio determines how many times the motor shaft must rotate to
-   * achieve one full rotation of the output shaft.
-   * In this case, the gear ratio is calculated as:
-   * (30.0 / 14.0) * (28.0 / 16.0) * (36.0 / 9.0) * (26.0 / 8.0) = 48.75
-   * This means the motor shaft rotates 48.75 times for each rotation of the
-   * output shaft.
+   * The gear ratio of the drive system. This is calculated as the product of the ratios of each
+   * stage in the gear train. The gear ratio determines how many times the motor shaft must rotate
+   * to achieve one full rotation of the output shaft. In this case, the gear ratio is calculated
+   * as: (30.0 / 14.0) * (28.0 / 16.0) * (36.0 / 9.0) * (26.0 / 8.0) = 48.75 This means the motor
+   * shaft rotates 48.75 times for each rotation of the output shaft.
    */
-  private static final double gearRatio = (30.0 / 14.0) * (28.0 / 16.0) * (36.0 / 9.0) * (26.0 / 8.0); // 48.75:1
+  private static final double gearRatio =
+      (30.0 / 14.0) * (28.0 / 16.0) * (36.0 / 9.0) * (26.0 / 8.0); // 48.75:1
 
   /**
-   * The number of encoder counts per revolution of the motor shaft.
-   * This value is specific to the encoder being used and represents how many
-   * pulses the encoder generates for one full rotation of the motor shaft.
-   * In this case, the encoder generates 12 counts per revolution of the motor
+   * The number of encoder counts per revolution of the motor shaft. This value is specific to the
+   * encoder being used and represents how many pulses the encoder generates for one full rotation
+   * of the motor shaft. In this case, the encoder generates 12 counts per revolution of the motor
    * shaft.
    */
   private static final double countsPerMotorShaftRev = 12.0;
 
   /**
-   * The number of encoder counts per revolution of the output shaft.
-   * This is calculated by multiplying the counts per motor shaft revolution by
-   * the gear ratio.
-   * It represents how many pulses the encoder generates for one full rotation of
-   * the output shaft.
-   * For this drive system, it is calculated as:
-   * countsPerMotorShaftRev * gearRatio = 12.0 * 48.75 = 585.0
-   * This means the encoder generates 585 counts for each full rotation of the
-   * output shaft.
+   * The number of encoder counts per revolution of the output shaft. This is calculated by
+   * multiplying the counts per motor shaft revolution by the gear ratio. It represents how many
+   * pulses the encoder generates for one full rotation of the output shaft. For this drive system,
+   * it is calculated as: countsPerMotorShaftRev * gearRatio = 12.0 * 48.75 = 585.0 This means the
+   * encoder generates 585 counts for each full rotation of the output shaft.
    */
   private static final double countsPerRevolution = countsPerMotorShaftRev * gearRatio; // 585.0
 
@@ -54,7 +46,8 @@ public class DriveDifferentialIOXrp implements DriveDifferentialIO {
   private final Encoder rightEncoder = new Encoder(6, 7);
 
   // Set up the differential drive controller
-  private final DifferentialDrive differentialDrive = new DifferentialDrive(leftMotor::set, rightMotor::set);
+  private final DifferentialDrive differentialDrive =
+      new DifferentialDrive(leftMotor::set, rightMotor::set);
 
   // Set up the XRPGyro
   private final XRPGyro gyro = new XRPGyro();
@@ -73,14 +66,12 @@ public class DriveDifferentialIOXrp implements DriveDifferentialIO {
     rightEncoder.setDistancePerPulse((Math.PI * 2) / countsPerRevolution);
 
     /**
-     * Resets the encoders to their initial state.
-     * This method is typically called during the initialization of the drive system
-     * to ensure that the encoder readings start from zero.
-     * By resetting the encoders, any previous counts or distances recorded by the
-     * encoders are cleared.
-     * This is important for accurate tracking of the robot's movement, as it
-     * ensures that the encoder values reflect the current position and movement of
-     * the robot from a known starting point.
+     * Resets the encoders to their initial state. This method is typically called during the
+     * initialization of the drive system to ensure that the encoder readings start from zero. By
+     * resetting the encoders, any previous counts or distances recorded by the encoders are
+     * cleared. This is important for accurate tracking of the robot's movement, as it ensures that
+     * the encoder values reflect the current position and movement of the robot from a known
+     * starting point.
      */
     resetEncoders();
 

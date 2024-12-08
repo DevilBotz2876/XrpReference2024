@@ -7,20 +7,19 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.drive.DriveSubsystemXrp;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 
 public class DriveDistance extends Command {
-  private final DriveSubsystemXrp m_drive;
-  private final double m_distance;
-  private final double m_speed;
-  private final PIDController m_pidController;
-  private final DifferentialDriveKinematics m_kinematics;
+  private final DriveSubsystemXrp drive;
+  private final double distance;
+  private final double speed;
+  private final PIDController pidController;
+  private final DifferentialDriveKinematics kinematics;
+  private double rightWheelStartPosition;
+  private double leftWheelStartPosition;
 
   /**
    * Creates a new DriveDistance. This command will drive your your robot for a desired distance at
@@ -30,15 +29,15 @@ public class DriveDistance extends Command {
    * @param meters The number of meters the robot will drive
    * @param drive The drivetrain subsystem on which this command will run
    */
-  public DriveDistance(double speed, double meters, DriveSubsystemXrp drive) {
-    m_distance = meters;
-    m_speed = speed;
-    m_drive = drive;
-    m_pidController = new PIDController(1.0, 0.0, 0.0); // Adjust PID constants as needed
-    
+  public DriveDistance(double driveSpeed, double meters, DriveSubsystemXrp driveSubsystem) {
+    distance = meters;
+    speed = driveSpeed;
+    drive = driveSubsystem;
+
+    pidController = new PIDController(1.0, 0.0, 0.0); // Adjust PID constants as needed
+
     // Create a DifferentialDriveKinematics object with the track width
-    m_kinematics = 
-      new DifferentialDriveKinematics(DriveConstants.trackWidthMeters);
+    kinematics = new DifferentialDriveKinematics(DriveConstants.trackWidthMeters);
 
     addRequirements(drive);
   }
@@ -46,43 +45,50 @@ public class DriveDistance extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
-    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
-    m_drive.resetEncoders();
-    m_pidController.reset();
+
+    drive.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
+    pidController.reset();
+    rightWheelStartPosition = drive.getRightPositionMeters();
+    leftWheelStartPosition = drive.getLeftPositionMeters();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftDistance = m_drive.getLeftPositionMeters();
-    double rightDistance = m_drive.getLeftPositionMeters();
-    double error = leftDistance - rightDistance;
-    double correction = m_pidController.calculate(error);
+    double leftDistance = leftWheelStartPosition - drive.getLeftPositionMeters();
+    double rightDistance = rightWheelStartPosition - drive.getRightPositionMeters();
+    System.out.println("Left: " + leftDistance + " Right: " + rightDistance);
 
-    double leftSpeed = m_speed - correction;
-    double rightSpeed = m_speed + correction;
+    double error = leftDistance - rightDistance;
+    double correction = pidController.calculate(error);
+
+    double leftSpeed = speed - correction;
+    double rightSpeed = speed + correction;
 
     // Create a DifferentialDriveWheelSpeeds object with the wheel speeds
-    DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
+    DifferentialDriveWheelSpeeds wheelSpeeds =
+        new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
 
     // Convert the wheel speeds to chassis speeds
-    ChassisSpeeds chassisSpeeds = m_kinematics.toChassisSpeeds(wheelSpeeds);
+    ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(wheelSpeeds);
 
-
-    m_drive.setChassisSpeeds(chassisSpeeds);
+    drive.setChassisSpeeds(chassisSpeeds);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.setChassisSpeeds(new ChassisSpeeds(0,0,0));
+    drive.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // Compare distance travelled from start to desired distance
-    return Math.abs(m_drive.getAverageDistanceMeters()) >= m_distance;
+    double leftDistanceTraveled = leftWheelStartPosition - drive.getLeftPositionMeters();
+    double rightDistanceTraveled = rightWheelStartPosition - drive.getRightPositionMeters();
+
+    double distanceTraveled = (leftDistanceTraveled + rightDistanceTraveled) / 2.0;
+    System.out.println("Distance Traveled: " + distanceTraveled);
+    return (Math.abs(distanceTraveled) >= distance);
   }
 }

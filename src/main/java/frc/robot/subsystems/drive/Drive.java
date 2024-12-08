@@ -26,15 +26,12 @@ public interface Drive {
   public Pose2d getPose();
 
   /**
-   * Sets the pose of the robot.
-   * The pose includes the position (x, y coordinates) and orientation (heading)
-   * of the robot.
-   * This method is typically used to reset the robot's position and orientation
-   * during initialization
-   * or after a significant event, such as a collision or manual repositioning.
+   * Sets the pose of the robot. The pose includes the position (x, y coordinates) and orientation
+   * (heading) of the robot. This method is typically used to reset the robot's position and
+   * orientation during initialization or after a significant event, such as a collision or manual
+   * repositioning.
    *
-   * @param pose The pose to set, which includes the x and y coordinates and the
-   *             orientation.
+   * @param pose The pose to set, which includes the x and y coordinates and the orientation.
    */
   public void setPose(Pose2d pose);
 }

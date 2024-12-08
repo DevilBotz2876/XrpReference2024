@@ -18,23 +18,22 @@ public class TankDrive extends Command {
   private final Supplier<Double> rightWheelSpeedSupplier;
   private final Supplier<Double> leftWheelSpeedSupplier;
 
-
   // Create a DifferentialDriveKinematics object with the track width
-  private DifferentialDriveKinematics kinematics = 
-    new DifferentialDriveKinematics(DriveConstants.trackWidthMeters);
+  private DifferentialDriveKinematics kinematics =
+      new DifferentialDriveKinematics(DriveConstants.trackWidthMeters);
 
   /**
-   * Creates a new TankDrive. This command will drive your robot according to the
-   * speed supplier
+   * Creates a new TankDrive. This command will drive your robot according to the speed supplier
    * lambdas. This command does not terminate.
    *
-   * @param drive                   The drivetrain subsystem on which this command
-   *                                will run
-   * @param leftWheelSpeedSupplier  Lambda supplier of forward/backward speed
+   * @param drive The drivetrain subsystem on which this command will run
+   * @param leftWheelSpeedSupplier Lambda supplier of forward/backward speed
    * @param rightWheelSpeedSupplier Lambda supplier of rotational speed
    */
   public TankDrive(
-      Drive drive, Supplier<Double> leftWheelSpeedSupplier, Supplier<Double> rightWheelSpeedSupplier) {
+      Drive drive,
+      Supplier<Double> leftWheelSpeedSupplier,
+      Supplier<Double> rightWheelSpeedSupplier) {
     this.drive = drive;
     this.rightWheelSpeedSupplier = leftWheelSpeedSupplier;
     this.leftWheelSpeedSupplier = rightWheelSpeedSupplier;
@@ -43,31 +42,31 @@ public class TankDrive extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    double rightWheelSpeed = rightWheelSpeedSupplier.get() * DriveConstants.maxLinearVelocityMetersPerSec;
-    double leftWheelSpeed = leftWheelSpeedSupplier.get() * DriveConstants.maxLinearVelocityMetersPerSec;
+
+    double rightWheelSpeed =
+        rightWheelSpeedSupplier.get() * DriveConstants.maxLinearVelocityMetersPerSec;
+    double leftWheelSpeed =
+        leftWheelSpeedSupplier.get() * DriveConstants.maxLinearVelocityMetersPerSec;
 
     // Create a DifferentialDriveWheelSpeeds object with the wheel speeds
-    DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(leftWheelSpeed, rightWheelSpeed);
-    
+    DifferentialDriveWheelSpeeds wheelSpeeds =
+        new DifferentialDriveWheelSpeeds(leftWheelSpeed, rightWheelSpeed);
+
     // Convert the wheel speeds to chassis speeds
     ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(wheelSpeeds);
 
     // Pass the wheel speeds to the drive subsystem
     drive.setChassisSpeeds(chassisSpeeds);
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

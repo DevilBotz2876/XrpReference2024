@@ -5,14 +5,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ArcadeDrive;
-import frc.robot.commands.TankDrive;
+// This is neeeded if you are using TankDrive
+// import frc.robot.commands.TankDrive;
 import frc.robot.commands.ArmCommand;
+import frc.robot.commands.AutonomousDistance;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.arm.ArmIOXrp;
@@ -23,20 +22,12 @@ import frc.robot.subsystems.intake.IntakeIOXrp;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOXrp;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.commands.AutonomousDistance;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a "declarative" paradigm, very little robot logic should
- * actually be handled in
- * the {@link Robot} periodic methods (other than the scheduler calls). Instead,
- * the structure of
- * the robot (including subsystems, commands, and button mappings) should be
- * declared here.
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -47,27 +38,16 @@ public class RobotContainer {
 
   private final CommandXboxController mainController = new CommandXboxController(0);
 
-  // Stores the number of times the "B" button has been pressed
-  private int bPressCount = 0;
-
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
   }
 
-  // Create SmartDashboard chooser for autonomous routines
-  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
-
-
   /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one
-   * of its subclasses ({@link edu.wpi.first.wpilibj.Joystick} or {@link 
-   * XboxController}), and then passing it to a {@link
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
@@ -75,9 +55,7 @@ public class RobotContainer {
     // Configure the robot to be driven by the left stick for steering and for
     // throttle
     drive.setDefaultCommand(
-        new ArcadeDrive(drive,
-            () -> -mainController.getLeftY(),
-            () -> -mainController.getLeftX()));
+        new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getLeftX()));
 
     // // Arcade drive but left stick for throttle and right stick controls steering
     // drive.setDefaultCommand(
@@ -85,24 +63,24 @@ public class RobotContainer {
     //         () -> -mainController.getLeftY(),
     //         () -> -mainController.getRightX()));
 
-    //Both sticks control steering using TankDrive
+    // Both sticks control steering using TankDrive
     // drive.setDefaultCommand(
     //        new TankDrive(drive,
     //           () -> -mainController.getLeftY(),
     //           () -> -mainController.getRightY()));
-    
+
     arm.setDefaultCommand(new ArmCommand(arm, () -> -mainController.getRightY()));
 
     intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
 
-    shooter.setDefaultCommand(new ShooterCommand(shooter,
-        () -> mainController.getLeftTriggerAxis(),
-        () -> mainController.getRightTriggerAxis()));
+    shooter.setDefaultCommand(
+        new ShooterCommand(
+            shooter,
+            () -> mainController.getLeftTriggerAxis(),
+            () -> mainController.getRightTriggerAxis()));
 
     mainController.a().toggleOnTrue(new AutonomousDistance(drive));
-    
   }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
