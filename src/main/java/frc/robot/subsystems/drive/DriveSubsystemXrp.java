@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelPositions;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -55,6 +56,10 @@ public class DriveSubsystemXrp extends SubsystemBase implements Drive {
    */
   public DriveSubsystemXrp(DriveDifferentialIO io) {
     this.io = io;
+
+    // START: Setup Odometry
+    SmartDashboard.putData("Field", field);
+    // END: Setup Odometry
   }
 
   /**
