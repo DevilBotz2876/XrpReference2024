@@ -29,12 +29,16 @@ public class DriveDistance extends Command {
    * @param meters The number of meters the robot will drive
    * @param drive The drivetrain subsystem on which this command will run
    */
-  public DriveDistance(double driveSpeed, double meters, DriveSubsystemXrp driveSubsystem) {
+  public DriveDistance(
+      double driveSpeed,
+      double meters,
+      DriveSubsystemXrp driveSubsystem,
+      PIDController wheelPIDController) {
     distance = meters;
     speed = driveSpeed;
     drive = driveSubsystem;
 
-    pidController = new PIDController(1.0, 0.0, 0.0); // Adjust PID constants as needed
+    pidController = wheelPIDController; // Adjust PID constants as needed
 
     // Create a DifferentialDriveKinematics object with the track width
     kinematics = new DifferentialDriveKinematics(DriveConstants.trackWidthMeters);
@@ -50,6 +54,8 @@ public class DriveDistance extends Command {
     pidController.reset();
     rightWheelStartPosition = drive.getRightPositionMeters();
     leftWheelStartPosition = drive.getLeftPositionMeters();
+
+    return;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -57,7 +63,6 @@ public class DriveDistance extends Command {
   public void execute() {
     double leftDistance = leftWheelStartPosition - drive.getLeftPositionMeters();
     double rightDistance = rightWheelStartPosition - drive.getRightPositionMeters();
-    System.out.println("Left: " + leftDistance + " Right: " + rightDistance);
 
     double error = leftDistance - rightDistance;
     double correction = pidController.calculate(error);

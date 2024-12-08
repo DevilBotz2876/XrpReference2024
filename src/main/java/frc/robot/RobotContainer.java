@@ -11,7 +11,7 @@ import frc.robot.commands.ArcadeDrive;
 // This is neeeded if you are using TankDrive
 // import frc.robot.commands.TankDrive;
 import frc.robot.commands.ArmCommand;
-import frc.robot.commands.AutonomousDistance;
+import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.arm.ArmIOXrp;
@@ -78,8 +78,6 @@ public class RobotContainer {
             shooter,
             () -> mainController.getLeftTriggerAxis(),
             () -> mainController.getRightTriggerAxis()));
-
-    mainController.a().toggleOnTrue(new AutonomousDistance(drive));
   }
 
   /**
@@ -88,7 +86,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return null;
+
+    Command myAuto = new AutonomousCommand(drive);
+
+    return myAuto;
   }
 }

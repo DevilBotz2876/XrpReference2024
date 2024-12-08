@@ -25,5 +25,9 @@ public final class Constants {
     // The track width of the robot in meters.
     // This is the distance between the left and right wheels of the robot.
     public static double trackWidthMeters = 0.06;
+
+    public static double wheelkP = 0.1;
+    public static double wheelkI = 0.0;
+    public static double wheelkD = 0.0;
   }
 }
