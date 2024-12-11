@@ -32,6 +32,6 @@ public class IntakeIOXrp implements IntakeIO {
     // Note: since the XRP servo API operates in the 1000-2000us range, we actually cannot achieve
     // the absolute max speed of the continuous servo (900 or 2100us).
     //
-    servo.setPosition((speed + 1) / 2);
+    servo.setPosition((speed + 1) / 3);
   }
 }
