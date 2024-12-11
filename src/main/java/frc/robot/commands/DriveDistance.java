@@ -11,15 +11,18 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.drive.DriveSubsystemXrp;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveDistance extends Command {
-  private final DriveSubsystemXrp drive;
-  private final double distance;
-  private final double speed;
-  private final PIDController pidController;
-  private final DifferentialDriveKinematics kinematics;
+  private DriveSubsystemXrp drive;
+  private double distance;
+  private double speed;
+  private PIDController distancePIDController;
+  private PIDController zRotationPIDController;
+  private DifferentialDriveKinematics kinematics;
   private double rightWheelStartPosition;
   private double leftWheelStartPosition;
+  private double zRotationStartingPosition;
 
   /**
    * Creates a new DriveDistance. This command will drive your your robot for a desired distance at
@@ -29,19 +32,26 @@ public class DriveDistance extends Command {
    * @param meters The number of meters the robot will drive
    * @param drive The drivetrain subsystem on which this command will run
    */
+  
   public DriveDistance(
       double driveSpeed,
       double meters,
       DriveSubsystemXrp driveSubsystem,
-      PIDController wheelPIDController) {
+      PIDController dPIDController,
+      PIDController zPIDController
+      )
+       {
+
     distance = meters;
     speed = driveSpeed;
     drive = driveSubsystem;
-
-    pidController = wheelPIDController; // Adjust PID constants as needed
-
+    distancePIDController = dPIDController;
+    zRotationPIDController = zPIDController; // Initialize the PID controller for Z rotation
+    
     // Create a DifferentialDriveKinematics object with the track width
     kinematics = new DifferentialDriveKinematics(DriveConstants.trackWidthMeters);
+    
+
 
     addRequirements(drive);
   }
@@ -49,13 +59,12 @@ public class DriveDistance extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    drive.resetEncoders();
     drive.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
-    pidController.reset();
+    distancePIDController.reset();
     rightWheelStartPosition = drive.getRightPositionMeters();
     leftWheelStartPosition = drive.getLeftPositionMeters();
-
-    return;
+    zRotationStartingPosition = drive.getAngleZ();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -64,20 +73,42 @@ public class DriveDistance extends Command {
     double leftDistance = leftWheelStartPosition - drive.getLeftPositionMeters();
     double rightDistance = rightWheelStartPosition - drive.getRightPositionMeters();
 
-    double error = leftDistance - rightDistance;
-    double correction = pidController.calculate(error);
+    double distanceError = leftDistance - rightDistance;
 
-    double leftSpeed = speed - correction;
-    double rightSpeed = speed + correction;
+    double distanceCorrection = distancePIDController.calculate(distanceError);
+
+    double zRotationDrift = zRotationStartingPosition - drive.getAngleZ();
+    
+    // Calculate the Z rotation correction using the PID controller
+    double headingCorrection = zRotationPIDController.calculate(zRotationDrift);
+    
+    double leftSpeed = speed -  distanceCorrection;
+    double rightSpeed = speed + distanceCorrection;
 
     // Create a DifferentialDriveWheelSpeeds object with the wheel speeds
     DifferentialDriveWheelSpeeds wheelSpeeds =
-        new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
+            new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
 
-    // Convert the wheel speeds to chassis speeds
+    // // Convert the wheel speeds to chassis speeds
     ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(wheelSpeeds);
+    // Log the new value
+    Logger.recordOutput("leftWheelStartPosition", leftWheelStartPosition);
+    Logger.recordOutput("rightWheelStartPosition", rightWheelStartPosition);
+    Logger.recordOutput("LeftPositionMeters", drive.getLeftPositionMeters());
+    Logger.recordOutput("RightPositionMeters", drive.getLeftPositionMeters());
+    Logger.recordOutput("leftDistance", leftDistance);
+    Logger.recordOutput("rightDistance", leftDistance);
+    Logger.recordOutput("distanceError", distanceError);
+    Logger.recordOutput("distanceCorrection", distanceCorrection);
+    Logger.recordOutput("zRotationDrift", zRotationDrift);
+    Logger.recordOutput("headingCorrection", headingCorrection);
+    Logger.recordOutput("leftSpeed", leftSpeed);
+    Logger.recordOutput("rightSpeed", rightSpeed);
+    Logger.recordOutput("chassisSpeeds", chassisSpeeds);
+    Logger.recordOutput("zRotationStartingPosition", zRotationStartingPosition);
 
     drive.setChassisSpeeds(chassisSpeeds);
+
   }
 
   // Called once the command ends or is interrupted.
@@ -93,7 +124,6 @@ public class DriveDistance extends Command {
     double rightDistanceTraveled = rightWheelStartPosition - drive.getRightPositionMeters();
 
     double distanceTraveled = (leftDistanceTraveled + rightDistanceTraveled) / 2.0;
-    System.out.println("Distance Traveled: " + distanceTraveled);
     return (Math.abs(distanceTraveled) >= distance);
   }
 }

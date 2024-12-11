@@ -24,10 +24,45 @@ public final class Constants {
 
     // The track width of the robot in meters.
     // This is the distance between the left and right wheels of the robot.
-    public static double trackWidthMeters = 0.06;
+    public static double trackWidthMeters = 0.155;
 
-    public static double wheelkP = 0.1;
-    public static double wheelkI = 0.0;
-    public static double wheelkD = 0.0;
+    // The diameter of the robot's wheels in meters (60 mm).
+    public static double wheelDiameterMeters = 0.060;
+
+    public class speedPIDConstants {
+      // The proportional gain for the PID controller.
+      // This value determines how strongly the controller reacts to the current error.
+      // A higher kP value will result in a stronger response to the error, but may cause overshooting.
+      public static double kP = .5;
+
+      // The integral gain for the PID controller.
+      // This value determines how strongly the controller reacts to the accumulation of past errors.
+      // A higher kI value will result in a stronger response to accumulated errors, but may cause instability.
+      public static double kI = 0.00;
+
+      // The derivative gain for the PID controller.
+      // This value determines how strongly the controller reacts to the rate of change of the error.
+      // A higher kD value will result in a stronger response to the rate of change, helping to dampen oscillations.
+      public static double kD = .5;
+    }
+
+    public class zRotationPIDConstants {
+      // The proportional gain for the PID controller.
+      // This value determines how strongly the controller reacts to the current error.
+      // A higher kP value will result in a stronger response to the error, but may cause overshooting.
+      public static double kP = 0.01;
+
+      // The integral gain for the PID controller.
+      // This value determines how strongly the controller reacts to the accumulation of past errors.
+      // A higher kI value will result in a stronger response to accumulated errors, but may cause instability.
+      public static double kI = 0.0;
+
+      // The derivative gain for the PID controller.
+      // This value determines how strongly the controller reacts to the rate of change of the error.
+      // A higher kD value will result in a stronger response to the rate of change, helping to dampen oscillations.
+      public static double kD = 0.01;
+    }
+
+
   }
 }

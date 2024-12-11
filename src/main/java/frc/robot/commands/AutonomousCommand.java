@@ -20,10 +20,17 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
     // Creates a PID Controller for the wheels going in a straight line
     PIDController wheelPIDController =
-        new PIDController(DriveConstants.wheelkP, DriveConstants.wheelkI, DriveConstants.wheelkD);
+        new PIDController(DriveConstants.speedPIDConstants.kP, 
+                          DriveConstants.speedPIDConstants.kI,
+                          DriveConstants.speedPIDConstants.kD);
+
+    PIDController zAxisPidController =
+        new PIDController(DriveConstants.zRotationPIDConstants.kP, 
+                          DriveConstants.zRotationPIDConstants.kI,
+                          DriveConstants.zRotationPIDConstants.kD);
 
     addCommands(
-        new DriveDistance(1, .1, drivetrain, wheelPIDController), // Drive forward
-        new DriveDistance(-1, .1, drivetrain, wheelPIDController)); // Drive backward
+        new DriveDistance(1, 1, drivetrain, wheelPIDController, zAxisPidController), // Drive forward
+        new DriveDistance(-1, 1, drivetrain, wheelPIDController, zAxisPidController)); // Drive backward
   }
 }

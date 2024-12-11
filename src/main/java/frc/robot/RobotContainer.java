@@ -22,6 +22,7 @@ import frc.robot.subsystems.intake.IntakeIOXrp;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOXrp;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,6 +31,10 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
+        
+
+
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystemXrp drive = new DriveSubsystemXrp(new DriveDifferentialIOXrp());
   private final ArmSubsystem arm = new ArmSubsystem(new ArmIOXrp(4));

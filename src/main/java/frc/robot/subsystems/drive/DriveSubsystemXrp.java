@@ -25,10 +25,10 @@ public class DriveSubsystemXrp extends SubsystemBase implements Drive {
       new DriveDifferentialIOInputsAutoLogged();
 
   // The diameter of the robot's wheels in meters (60 mm).
-  private static final double wheelDiameterMeters = 0.060;
+  private static final double wheelDiameterMeters = DriveConstants.wheelDiameterMeters;
 
   // The track width of the robot in meters (155 mm).
-  private static final double trackWidthMeters = 0.155;
+  private static final double trackWidthMeters = DriveConstants.trackWidthMeters;
 
   // The kinematics object used to convert between chassis speeds and wheel
   // speeds.
@@ -130,6 +130,11 @@ public class DriveSubsystemXrp extends SubsystemBase implements Drive {
     this.pose = pose;
   }
 
+  public void resetEncoders()
+  {
+    io.resetEncoders();
+  }
+
   /**
    * This method is called periodically by the scheduler. It updates the robot's inputs, processes
    * those inputs, updates the robot's pose using odometry, and updates the field with the robot's
@@ -170,6 +175,24 @@ public class DriveSubsystemXrp extends SubsystemBase implements Drive {
    */
   public double getLeftPositionMeters() {
     return Units.radiansToRotations(inputs.leftPositionRad) * wheelDiameterMeters;
+  }
+
+  @Override
+  public double getAngleX()
+  {
+    return inputs.xRotation.getDegrees();
+  }
+
+  @Override
+  public double getAngleY()
+  {
+    return inputs.yRotation.getDegrees();
+  }
+
+  @Override
+  public double getAngleZ()
+  {
+    return inputs.zRotation.getDegrees();
   }
 
   @Override
