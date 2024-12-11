@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -30,6 +31,7 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.TurnDegrees;
 import frc.robot.commands.TurnDegreesGyro;
+import frc.robot.commands.auto.center.Center1Note;
 import frc.robot.subsystems.arm.ArmIOXrp;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.DriveDifferentialIOXrp;
@@ -52,9 +54,11 @@ public class RobotContainer {
   private final ArmSubsystem arm = new ArmSubsystem(new ArmIOXrp(4));
   // private final ArmSubsystem arm = new ArmSubsystem(new ArmIOStud());
   private final IntakeSubsystem intake = new IntakeSubsystem(new IntakeIOXrp(5));
-  private final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOXrp(2));
+  private final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOXrp(3));
 
   private final CommandXboxController mainController = new CommandXboxController(0);
+
+  private final SendableChooser<Command> autoChooser =  new SendableChooser<>();
 
   private boolean useYJoystick = true;
 
@@ -67,6 +71,11 @@ public class RobotContainer {
     Mechanism2d mech2d = new Mechanism2d(60, 60);
     arm.add2dSim(mech2d);
     SmartDashboard.putData("2D Mech", mech2d);
+
+    autoChooser.setDefaultOption("None", new Command() {});
+    autoChooser.addOption("Center 1 Note", new Center1Note(drive, arm, shooter, intake));
+    autoChooser.addOption("1.5s Forward", new AutoDrive(drive));
+    SmartDashboard.putData(autoChooser);
   }
 
   /**
@@ -184,6 +193,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new AutoDrive(drive);
+    return autoChooser.getSelected();
   }
 }

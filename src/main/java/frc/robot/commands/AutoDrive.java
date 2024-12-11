@@ -7,6 +7,6 @@ public class AutoDrive extends SequentialCommandGroup {
 
   public AutoDrive(Drive drive) {
 
-    addCommands(new ArcadeDrive(drive, () -> 1.0, () -> 0.0).withTimeout(3));
+    addCommands(new ArcadeDrive(drive, () -> 1.0, () -> 0.0).withTimeout(1.0));
   }
 }
