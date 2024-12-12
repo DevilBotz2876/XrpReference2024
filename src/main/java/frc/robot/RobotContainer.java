@@ -32,13 +32,10 @@ import org.littletonrobotics.junction.Logger;
  */
 public class RobotContainer {
 
-        
-
-
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystemXrp drive = new DriveSubsystemXrp(new DriveDifferentialIOXrp());
-  private final ArmSubsystem arm = new ArmSubsystem(new ArmIOXrp(4));
-  private final IntakeSubsystem intake = new IntakeSubsystem(new IntakeIOXrp(5));
+  private final ArmSubsystem arm = new ArmSubsystem(new ArmIOXrp(4), new ArmIOXrp(5));
+  //private final IntakeSubsystem intake = new IntakeSubsystem(new IntakeIOXrp(5));
   private final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOXrp(2));
 
   private final CommandXboxController mainController = new CommandXboxController(0);
@@ -76,7 +73,7 @@ public class RobotContainer {
 
     arm.setDefaultCommand(new ArmCommand(arm, () -> -mainController.getRightY()));
 
-    intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
+    //intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
 
     shooter.setDefaultCommand(
         new ShooterCommand(

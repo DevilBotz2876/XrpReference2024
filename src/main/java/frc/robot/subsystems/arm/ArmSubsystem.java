@@ -4,24 +4,30 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class ArmSubsystem extends SubsystemBase implements Arm {
-  ArmIO io;
-  ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
+  ArmIO ioOne;  
+  ArmIO ioTwo;
+  ArmIOInputsAutoLogged inputsOne = new ArmIOInputsAutoLogged();
+  ArmIOInputsAutoLogged inputsTwo = new ArmIOInputsAutoLogged();
 
-  public ArmSubsystem(ArmIO io) {
-    this.io = io;
+  public ArmSubsystem(ArmIO ioOne, ArmIO ioTwo) {
+    this.ioOne = ioOne;
+    this.ioTwo = ioTwo;
   }
 
   @Override
   public void periodic() {
-    io.updateInputs(inputs);
-    Logger.processInputs("arm", inputs);
+    ioOne.updateInputs(inputsOne);
+    ioTwo.updateInputs(inputsTwo);
+    Logger.processInputs("armOne", inputsOne);
+    Logger.processInputs("armTwo", inputsTwo);
   }
 
   public void setAngle(double angleDeg) {
-    io.setAngle(angleDeg);
+    ioOne.setAngle(angleDeg);
+    ioTwo.setAngle(angleDeg);
   }
 
   public double getAngle() {
-    return inputs.angleDeg;
+    return inputsOne.angleDeg;
   }
 }
