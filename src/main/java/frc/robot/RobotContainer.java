@@ -8,7 +8,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ArcadeDrive;
+// This is neeeded if you are using TankDrive
+// import frc.robot.commands.TankDrive;
 import frc.robot.commands.ArmCommand;
+import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.arm.ArmIOXrp;
@@ -19,6 +22,7 @@ import frc.robot.subsystems.intake.IntakeIOXrp;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOXrp;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -27,10 +31,11 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystemXrp drive = new DriveSubsystemXrp(new DriveDifferentialIOXrp());
-  private final ArmSubsystem arm = new ArmSubsystem(new ArmIOXrp(4));
-  private final IntakeSubsystem intake = new IntakeSubsystem(new IntakeIOXrp(5));
+  private final ArmSubsystem arm = new ArmSubsystem(new ArmIOXrp(4), new ArmIOXrp(5));
+  //private final IntakeSubsystem intake = new IntakeSubsystem(new IntakeIOXrp(5));
   private final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOXrp(2));
 
   private final CommandXboxController mainController = new CommandXboxController(0);
@@ -48,11 +53,28 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
+    // Configure the robot to be driven by the left stick for steering and for
+    // throttle
     drive.setDefaultCommand(
         new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getLeftX()));
 
+    // // Arcade drive but left stick for throttle and right stick controls steering
+    // drive.setDefaultCommand(
+    //     new ArcadeDrive(drive,
+    //         () -> -mainController.getLeftY(),
+    //         () -> -mainController.getRightX()));
+
+    // Both sticks control steering using TankDrive
+    // drive.setDefaultCommand(
+    //        new TankDrive(drive,
+    //           () -> -mainController.getLeftY(),
+    //           () -> -mainController.getRightY()));
+
     arm.setDefaultCommand(new ArmCommand(arm, () -> -mainController.getRightY()));
-    intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
+
+    //intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
+
     shooter.setDefaultCommand(
         new ShooterCommand(
             shooter,
@@ -66,7 +88,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return null;
+
+    Command myAuto = new AutonomousCommand(drive);
+
+    return myAuto;
   }
 }
