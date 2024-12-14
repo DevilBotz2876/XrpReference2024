@@ -57,7 +57,12 @@ public class RobotContainer {
         new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getLeftX()));
 
     arm.setDefaultCommand(new ArmCommand(arm, () -> mainController.getRightY()));
-    intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
+    intake.setDefaultCommand(new IntakeCommand(intake,() -> {
+      if(mainController.getHID().getAButton()==true){
+        return 1.0;
+      }
+      return 0.5;
+    }));
     shooter.setDefaultCommand(
         new ShooterCommand(
             shooter,
