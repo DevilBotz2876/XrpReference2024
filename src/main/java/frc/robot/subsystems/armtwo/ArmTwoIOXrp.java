@@ -14,6 +14,6 @@ public class ArmTwoIOXrp implements ArmTwoIO {
   }
 
   public void setAngle(double angleDeg) {
-    servo.setAngle(-angleDeg + 240);
+    servo.setAngle(angleDeg);
   }
 }

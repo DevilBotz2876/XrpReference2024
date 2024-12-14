@@ -8,7 +8,7 @@ public class DefaultAuto extends SequentialCommandGroup {
     addCommands(
         // new DriveForward(drive, 1),
         // new DriveTurn(drive, -30), // neg is right pos is left
-        new DriveForward(drive, 0.5
+        new DriveForward(drive, 3.0
            )
     );
   }
