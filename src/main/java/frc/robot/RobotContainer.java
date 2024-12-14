@@ -54,7 +54,7 @@ public class RobotContainer {
   private final ArmSubsystem arm = new ArmSubsystem(new ArmIOXrp(4));
   // private final ArmSubsystem arm = new ArmSubsystem(new ArmIOStud());
   private final IntakeSubsystem intake = new IntakeSubsystem(new IntakeIOXrp(5));
-  private final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOXrp(3));
+  private final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOXrp(2));
 
   private final CommandXboxController mainController = new CommandXboxController(0);
 
@@ -97,7 +97,7 @@ public class RobotContainer {
 
     Trigger armJoystickTrigger = armJoystickBooleanEvent.castTo(Trigger::new);
     armJoystickTrigger.whileTrue(
-        new ArmCommand(arm, () -> MathUtil.applyDeadband(-mainController.getRightY(), 0.05)));
+        new ArmCommand(arm, () -> MathUtil.applyDeadband(mainController.getRightY(), 0.05)));
 
     BooleanEvent armUpPOVEvent =
         new BooleanEvent(eventLoop, () -> mainController.pov(0).getAsBoolean())
@@ -107,10 +107,12 @@ public class RobotContainer {
             .and(() -> !useYJoystick);
 
     Trigger armUpPOVTrigger = armUpPOVEvent.castTo(Trigger::new);
-    armUpPOVTrigger.whileTrue(new SetArmAngleCommand(arm, () -> arm.getAngle() + 1));
+    armUpPOVTrigger.whileTrue(new SetArmAngleCommand(arm, () -> arm.getAngle() - 1));
 
     Trigger armDownPOVTrigger = armDownPOVEvent.castTo(Trigger::new);
-    armDownPOVTrigger.whileTrue(new SetArmAngleCommand(arm, () -> arm.getAngle() - 1));
+    armDownPOVTrigger.whileTrue(new SetArmAngleCommand(arm, () -> arm.getAngle() + 1));
+
+    mainController.a().toggleOnTrue(new SetArmAngleCommand(arm, () -> 43.0));
 
     intake.setDefaultCommand(new IntakeCommand(intake, () -> {
         if(mainController.leftBumper().getAsBoolean()) {
@@ -125,7 +127,9 @@ public class RobotContainer {
         new ShooterCommand(
             shooter,
             () -> mainController.getRightTriggerAxis() * 0.85,
-            () -> mainController.getLeftTriggerAxis() * 0.85));
+            () -> {if (mainController.getLeftTriggerAxis() > 0.90) {
+                return 0.9;}
+                return 0.0;} ));
 
     mainController
         .pov(270)

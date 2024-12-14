@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TurnDegrees;
@@ -16,21 +17,16 @@ public class Center1Note extends SequentialCommandGroup {
 
     public Center1Note(Drive drive, Arm arm, Shooter shooter, Intake intake) {
         addCommands(
-            // new ParallelCommandGroup(
-                new InstantCommand(() -> {
-                    arm.setAngle(120);
-                }),
-                new InstantCommand(() -> {
-                    shooter.setSpeed(0.85);
-                }),
-                // new ShooterCommand(shooter, () -> 0.85, () ->0.0).wit,
-            // ),
-            new WaitCommand(1),
-            new IntakeCommand(intake, () -> 0.5).withTimeout(1.0),
+
+            new ArcadeDrive(drive, () -> -1.0, () -> 0.0).withTimeout(0.1),
             new InstantCommand(() -> {
-                    shooter.setSpeed(0.0);
-                }).withTimeout(1.0),
-            new TurnDegrees(() -> 1.0, () -> 200.0, drive)
+                arm.setAngle(43);
+            }),
+            new ShooterCommand(shooter, () -> 0.80, () ->0.0).withTimeout(1.0),
+            new WaitCommand(1),
+            new IntakeCommand(intake, () -> 0.5).withTimeout(4.0),
+            new ArcadeDrive(drive, () -> -1.0, () -> 0.0).withTimeout(0.7)
+
         );
     }
 }
