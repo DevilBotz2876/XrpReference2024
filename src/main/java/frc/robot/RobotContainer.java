@@ -21,30 +21,42 @@ import frc.robot.subsystems.shooter.ShooterIOXrp;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic
+ * should actually be handled in the {@link Robot} periodic methods
+ * (other than the scheduler calls). Instead, the structure of
+ * the robot (including subsystems, commands, and button mappings)
+ * should be declared here.
  */
 public class RobotContainer {
+
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystemXrp drive = new DriveSubsystemXrp(new DriveDifferentialIOXrp());
-  private final ArmSubsystem arm = new ArmSubsystem(new ArmIOXrp(4));
+  
+  // servo 1 port on XRP
+  private final ArmSubsystem arm = new ArmSubsystem(new ArmIOXrp(4)); 
+  
+  // servo 2 port on XRP
   private final IntakeSubsystem intake = new IntakeSubsystem(new IntakeIOXrp(5));
+
+  // motor 3 port on XRP
   private final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOXrp(2));
 
   private final CommandXboxController mainController = new CommandXboxController(0);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one
+   * of its subclasses ({@link edu.wpi.first.wpilibj.Joystick} or
+   * {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
@@ -52,12 +64,14 @@ public class RobotContainer {
         new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getLeftX()));
 
     arm.setDefaultCommand(new ArmCommand(arm, () -> -mainController.getRightY()));
+
     intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
+    
     shooter.setDefaultCommand(
-        new ShooterCommand(
-            shooter,
-            () -> mainController.getLeftTriggerAxis(),
-            () -> mainController.getRightTriggerAxis()));
+         new ShooterCommand(
+             shooter,
+             () -> mainController.getLeftTriggerAxis(),
+             () -> mainController.getRightTriggerAxis()));
   }
 
   /**

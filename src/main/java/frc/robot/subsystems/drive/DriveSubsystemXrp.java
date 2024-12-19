@@ -15,6 +15,11 @@ import frc.robot.Constants.DriveConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+/**
+ * The DriveSubsystemXrp class represents the drive subsystem for an XRP robot.
+ * It extends SubsystemBase and implements the Drive interface, providing methods
+ * for controlling the robot's drive system, updating odometry, and logging data.
+ */
 public class DriveSubsystemXrp extends SubsystemBase implements Drive {
   private final DriveDifferentialIO io;
   private final DriveDifferentialIOInputsAutoLogged inputs =
