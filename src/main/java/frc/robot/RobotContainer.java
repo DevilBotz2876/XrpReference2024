@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.TankDrive;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
@@ -48,11 +49,28 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // drive.setDefaultCommand(
+    //     new ArcadeDrive(drive, 
+    //           () -> -mainController.getLeftY(), 
+    //           () -> -mainController.getLeftX()));
+
+    // Arcade drive but left stick for throttle and right stick controls steering
+    // drive.setDefaultCommand(
+    //     new ArcadeDrive(drive,
+    //         () -> -mainController.getLeftY(),
+    //         () -> -mainController.getRightX()));
+
+    // Both sticks control steering using TankDrive
+    // Note when this is enabled intake should be disabled or mapped to different
+    // logic as it uses getRightX for control 
     drive.setDefaultCommand(
-        new ArcadeDrive(drive, () -> -mainController.getLeftY(), () -> -mainController.getLeftX()));
+           new TankDrive(drive,
+              () -> -mainController.getLeftY(),
+              () -> -mainController.getRightY()));
+
 
     arm.setDefaultCommand(new ArmCommand(arm, () -> -mainController.getRightY()));
-    intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
+    // intake.setDefaultCommand(new IntakeCommand(intake, () -> -mainController.getRightX()));
     shooter.setDefaultCommand(
         new ShooterCommand(
             shooter,
