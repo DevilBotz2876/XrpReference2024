@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmCommand;
+import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.arm.ArmIOXrp;
@@ -67,6 +68,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    Command myAuto = new AutonomousCommand(drive);
+
+    return myAuto;
   }
 }

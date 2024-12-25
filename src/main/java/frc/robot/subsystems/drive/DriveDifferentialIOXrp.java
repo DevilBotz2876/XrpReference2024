@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.xrp.XRPGyro;
 import edu.wpi.first.wpilibj.xrp.XRPMotor;
+import frc.robot.util.XRPEncoder;
 
 public class DriveDifferentialIOXrp implements DriveDifferentialIO {
   private static final double gearRatio =
@@ -19,8 +20,8 @@ public class DriveDifferentialIOXrp implements DriveDifferentialIO {
 
   // The XRP has onboard encoders that are hardcoded
   // to use DIO pins 4/5 and 6/7 for the left and right
-  private final Encoder leftEncoder = new Encoder(4, 5);
-  private final Encoder rightEncoder = new Encoder(6, 7);
+  private final Encoder leftEncoder = new XRPEncoder(4, 5);
+  private final Encoder rightEncoder = new XRPEncoder(6, 7);
 
   // Set up the differential drive controller
   private final DifferentialDrive differentialDrive =
